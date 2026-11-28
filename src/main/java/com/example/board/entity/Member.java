@@ -61,9 +61,18 @@ public class Member implements UserDetails{
     }
     
     // 사용자가 URL/리소스에 접근할 수 있는 권한을 반환하는 메서드
-    @Override 
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    public void changePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
+    public void updateProfile(String name, String email) {
+        this.name = name;
+        this.email = email;
     }
 
     @Override 
@@ -74,6 +83,11 @@ public class Member implements UserDetails{
     @Override
     public String getUsername() {
         return email;
+    }
+
+    // getUsername()은 UserDetails 규약상 email을 반환하므로, 실제 로그인 아이디(username 필드)는 이 메서드로 조회한다.
+    public String getLoginId() {
+        return username;
     }
 
     @Override 
